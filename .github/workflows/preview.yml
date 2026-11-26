@@ -17,10 +17,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: ADAPT213/reality-engine
-          ref: ebafb762097e4dda704be6f7336037015de7991d
+          ref: 5f04c04981da4325e4362363a6b4a92fce6b42ce
           path: source
       - run: |
-          test "$(git -C source rev-parse HEAD)" = ebafb762097e4dda704be6f7336037015de7991d
+          test "$(git -C source rev-parse HEAD)" = 5f04c04981da4325e4362363a6b4a92fce6b42ce
           mkdir public
           cp -a source/candidate-pro/. public/
           cp source/LICENSE public/ 2>/dev/null || true
@@ -46,12 +46,12 @@ jobs:
           try {
             const page=await browser.newPage({permissions:['camera'],viewport:{width:390,height:844}});
             const errors=[];page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400)errors.push(r.url()+': '+r.status())});
-            const sha=await page.request.get(url+'source-sha.txt');if((await sha.text()).trim()!=='ebafb762097e4dda704be6f7336037015de7991d')throw Error('SHA mismatch');
+            const sha=await page.request.get(url+'source-sha.txt');if((await sha.text()).trim()!=='5f04c04981da4325e4362363a6b4a92fce6b42ce')throw Error('SHA mismatch');
             await page.goto(url+'?validate=1');
-            if(await page.locator('#mode option').count()!==12)throw Error('Lens inventory mismatch');
+            if(await page.locator('#mode option').count()!==14)throw Error('Lens inventory mismatch');
             await page.locator('#start').click();
             await page.waitForFunction(()=>window.proFrame?.frame>2,{},{timeout:30000});
-            for(let i=0;i<12;i++){await page.locator('#mode').evaluate((el,i)=>{el.selectedIndex=i;el.dispatchEvent(new Event('change'))},i);await page.waitForFunction(i=>window.proFrame?.route===i,i,{timeout:15000});}
+            for(let i=0;i<14;i++){await page.locator('#mode').evaluate((el,i)=>{el.selectedIndex=i;el.dispatchEvent(new Event('change'))},i);await page.waitForFunction(i=>window.proFrame?.route===i,i,{timeout:15000});}
             if(errors.length)throw Error(errors.join('\n'));
             console.log('Deployed preview passed: '+url);
           }finally{await browser.close()}
